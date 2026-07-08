@@ -139,3 +139,75 @@ function Link2({ href, label }: { href: string; label: string }) {
     </li>
   );
 }
+
+function NasaEyesEmbed() {
+  const [status, setStatus] = useState<"loading" | "error">("loading");
+  const src = "https://eyes.nasa.gov/apps/solar-system/#/home";
+
+  const handleLoad = useCallback(() => setStatus("loading"), []);
+  const handleError = useCallback(() => setStatus("error"), []);
+  const retry = useCallback(() => {
+    setStatus("loading");
+  }, []);
+
+  return (
+    <GlassCard glow className="p-2">
+      <div
+        className="relative w-full overflow-hidden rounded-xl bg-black"
+        style={{ aspectRatio: "16 / 9" }}
+      >
+        {status === "loading" && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/80 backdrop-blur-sm">
+            <div className="relative h-12 w-12">
+              <span className="absolute inset-0 rounded-full border-2 border-muted/30" />
+              <span className="absolute inset-0 rounded-full border-2 border-t-primary border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+            </div>
+            <div className="text-center space-y-1">
+              <p className="text-sm font-medium text-foreground">Loading NASA Eyes…</p>
+              <p className="text-xs text-muted-foreground">This immersive 3D app may take a moment.</p>
+            </div>
+          </div>
+        )}
+
+        {status === "error" ? (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/90 p-6 text-center">
+            <AlertTriangle className="h-10 w-10 text-amber-400" />
+            <div className="space-y-2 max-w-md">
+              <p className="text-base font-semibold">NASA Eyes could not load</p>
+              <p className="text-sm text-muted-foreground">
+                The iframe is blocked by your browser or NASA Eyes is temporarily unavailable.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={retry}
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition"
+              >
+                <RefreshCw className="h-4 w-4" /> Try again
+              </button>
+              <a
+                href={src}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-md glass px-4 py-2 text-sm font-medium hover:bg-primary/10 transition"
+              >
+                Open on NASA <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        ) : (
+          <iframe
+            src={src}
+            title="NASA Eyes on the Solar System"
+            className="absolute inset-0 h-full w-full"
+            allow="fullscreen; accelerometer; gyroscope; xr-spatial-tracking"
+            allowFullScreen
+            loading="lazy"
+            onLoad={handleLoad}
+            onError={handleError}
+          />
+        )}
+      </div>
+    </GlassCard>
+  );
+}
