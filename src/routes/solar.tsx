@@ -112,18 +112,7 @@ function SolarPage() {
             Open fullscreen <ExternalLink className="h-3 w-3" />
           </a>
         </div>
-        <GlassCard glow className="p-2">
-          <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: "16 / 9" }}>
-            <iframe
-              src="https://eyes.nasa.gov/apps/solar-system/#/home"
-              title="NASA Eyes on the Solar System"
-              className="absolute inset-0 h-full w-full"
-              allow="fullscreen; accelerometer; gyroscope; xr-spatial-tracking"
-              allowFullScreen
-              loading="lazy"
-            />
-          </div>
-        </GlassCard>
+        <NasaEyesEmbed />
       </div>
     </div>
   );
