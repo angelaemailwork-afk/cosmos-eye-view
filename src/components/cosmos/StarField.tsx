@@ -1,7 +1,10 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 /** Layered starfield + drifting nebula + auroras + shooting stars. Fixed to viewport. */
 export function StarField() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const stars = useMemo(() => {
     return Array.from({ length: 140 }).map((_, i) => ({
       id: i,
@@ -27,8 +30,8 @@ export function StarField() {
       <div className="absolute inset-0 animate-aurora"
         style={{ background: "linear-gradient(120deg, transparent 40%, oklch(0.70 0.20 180 / 0.18) 55%, transparent 70%)" }} />
 
-      {/* stars */}
-      {stars.map((s) => (
+      {/* stars (client-only to avoid SSR hydration mismatch) */}
+      {mounted && stars.map((s) => (
         <span key={s.id}
           className="absolute rounded-full bg-white animate-twinkle"
           style={{
