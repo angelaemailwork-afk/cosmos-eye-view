@@ -155,4 +155,3 @@ function StatusRow({ name, online }: { name: string; online: boolean }) {
     </li>
   );
 }
-}
