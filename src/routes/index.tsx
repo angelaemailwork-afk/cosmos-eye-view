@@ -5,6 +5,7 @@ import { GlassCard } from "@/components/cosmos/GlassCard";
 import { fetchIssPosition, fetchUpcomingLaunches, fetchSpaceNews, sdoImageUrl, formatCountdown } from "@/lib/api";
 import { Rocket, Newspaper, Sun, Satellite, ArrowRight, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useMounted } from "@/lib/use-mounted";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -18,6 +19,7 @@ function Index() {
   const [tick, setTick] = useState(0);
   useEffect(() => { const i = setInterval(() => setTick((t) => t + 1), 1000); return () => clearInterval(i); }, []);
   void tick;
+  const mounted = useMounted();
 
   const next = launches.data?.[0];
 
@@ -66,7 +68,9 @@ function Index() {
             <div className="mt-4">
               <div className="text-sm font-medium">{next.name}</div>
               <div className="text-xs text-muted-foreground mt-1">{next.launch_service_provider?.name}</div>
-              <div className="mt-4 font-mono text-2xl text-primary text-glow">{formatCountdown(next.net)}</div>
+              <div className="mt-4 font-mono text-2xl text-primary text-glow">
+                {mounted ? formatCountdown(next.net) : "T− …"}
+              </div>
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">
                 {new Date(next.net).toUTCString()}
               </div>
