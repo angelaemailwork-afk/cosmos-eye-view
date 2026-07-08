@@ -5,6 +5,7 @@ import { fetchUpcomingLaunches, formatCountdown, type Launch } from "@/lib/api";
 import { GlassCard } from "@/components/cosmos/GlassCard";
 import { PageHeader } from "./iss";
 import { Rocket, MapPin, ExternalLink, Radio } from "lucide-react";
+import { useMounted } from "@/lib/use-mounted";
 
 export const Route = createFileRoute("/launches")({
   head: () => ({
@@ -43,6 +44,7 @@ function LaunchesPage() {
 
 function LaunchCard({ launch }: { launch: Launch }) {
   const img = typeof launch.image === "string" ? launch.image : launch.image?.image_url;
+  const mounted = useMounted();
   const status = launch.status?.abbrev ?? "TBD";
   const statusColor =
     status === "Go" ? "text-green-400 border-green-400/40 bg-green-400/10" :
@@ -71,7 +73,9 @@ function LaunchCard({ launch }: { launch: Launch }) {
       </div>
 
       <div className="p-5 flex-1 flex flex-col">
-        <div className="font-mono text-2xl text-primary text-glow">{formatCountdown(launch.net)}</div>
+        <div className="font-mono text-2xl text-primary text-glow">
+          {mounted ? formatCountdown(launch.net) : "T− …"}
+        </div>
         <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">
           {new Date(launch.net).toUTCString()}
         </div>
