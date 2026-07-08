@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { sdoImageUrl, SDO_WAVELENGTHS } from "@/lib/api";
 import { GlassCard } from "@/components/cosmos/GlassCard";
 import { PageHeader } from "./iss";
-import { Sun, Zap, Waves, ExternalLink, Orbit } from "lucide-react";
+import { Sun, Zap, Waves, ExternalLink, Orbit, AlertTriangle, RefreshCw } from "lucide-react";
 
 export const Route = createFileRoute("/solar")({
   head: () => ({
