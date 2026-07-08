@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { sdoImageUrl, SDO_WAVELENGTHS } from "@/lib/api";
 import { GlassCard } from "@/components/cosmos/GlassCard";
 import { PageHeader } from "./iss";
-import { Sun, Zap, Waves, ExternalLink, Orbit, AlertTriangle, RefreshCw } from "lucide-react";
+import { Sun, Zap, Waves, ExternalLink, Orbit, AlertTriangle, RefreshCw, ShieldCheck } from "lucide-react";
+
+const NASA_CONSENT_KEY = "nasa-eyes-consent";
 
 export const Route = createFileRoute("/solar")({
   head: () => ({
@@ -158,7 +160,29 @@ function Link2({ href, label }: { href: string; label: string }) {
 
 function NasaEyesEmbed() {
   const [status, setStatus] = useState<"loading" | "error">("loading");
+  const [consented, setConsented] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const src = "https://eyes.nasa.gov/apps/solar-system/#/home";
+
+  useEffect(() => {
+    try {
+      setConsented(localStorage.getItem(NASA_CONSENT_KEY) === "true");
+    } catch {
+      // ignore
+    }
+    setHydrated(true);
+  }, []);
+
+  const toggleConsent = useCallback((next: boolean) => {
+    setConsented(next);
+    setStatus("loading");
+    try {
+      if (next) localStorage.setItem(NASA_CONSENT_KEY, "true");
+      else localStorage.removeItem(NASA_CONSENT_KEY);
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const handleLoad = useCallback(() => setStatus("loading"), []);
   const handleError = useCallback(() => setStatus("error"), []);
@@ -168,11 +192,62 @@ function NasaEyesEmbed() {
 
   return (
     <GlassCard glow className="p-2">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-2 pt-1 pb-3">
+        <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer select-none">
+          <input
+            type="checkbox"
+            className="h-4 w-4 accent-primary"
+            checked={consented}
+            disabled={!hydrated}
+            onChange={(e) => toggleConsent(e.target.checked)}
+          />
+          <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+          I accept the consent note and want to load the NASA Eyes viewer.
+        </label>
+        {consented && (
+          <button
+            onClick={() => toggleConsent(false)}
+            className="text-[11px] rounded-md glass px-2 py-1 hover:bg-primary/10 transition"
+          >
+            Revoke & unload
+          </button>
+        )}
+      </div>
+
       <div
         className="relative w-full overflow-hidden rounded-xl bg-black"
         style={{ aspectRatio: "16 / 9" }}
       >
-        {status === "loading" && (
+        {!consented && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/90 p-6 text-center">
+            <ShieldCheck className="h-10 w-10 text-primary" />
+            <div className="space-y-2 max-w-md">
+              <p className="text-base font-semibold">Consent required</p>
+              <p className="text-sm text-muted-foreground">
+                Check the box above to load NASA Eyes. Your choice is saved to this browser.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={() => toggleConsent(true)}
+                disabled={!hydrated}
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition disabled:opacity-50"
+              >
+                <ShieldCheck className="h-4 w-4" /> Accept & load
+              </button>
+              <a
+                href={src}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-md glass px-4 py-2 text-sm font-medium hover:bg-primary/10 transition"
+              >
+                Open on NASA <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        )}
+
+        {consented && status === "loading" && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/80 backdrop-blur-sm">
             <div className="relative h-12 w-12">
               <span className="absolute inset-0 rounded-full border-2 border-muted/30" />
@@ -185,7 +260,7 @@ function NasaEyesEmbed() {
           </div>
         )}
 
-        {status === "error" ? (
+        {consented && status === "error" ? (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/90 p-6 text-center">
             <AlertTriangle className="h-10 w-10 text-amber-400" />
             <div className="space-y-2 max-w-md">
@@ -211,7 +286,7 @@ function NasaEyesEmbed() {
               </a>
             </div>
           </div>
-        ) : (
+        ) : consented ? (
           <iframe
             src={src}
             title="NASA Eyes on the Solar System"
@@ -222,7 +297,7 @@ function NasaEyesEmbed() {
             onLoad={handleLoad}
             onError={handleError}
           />
-        )}
+        ) : null}
       </div>
     </GlassCard>
   );
