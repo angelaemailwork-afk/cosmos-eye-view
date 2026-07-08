@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SolarRouteImport } from './routes/solar'
+import { Route as LaunchesRouteImport } from './routes/launches'
 import { Route as IssRouteImport } from './routes/iss'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SolarRoute = SolarRouteImport.update({
   id: '/solar',
   path: '/solar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaunchesRoute = LaunchesRouteImport.update({
+  id: '/launches',
+  path: '/launches',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IssRoute = IssRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/iss': typeof IssRoute
+  '/launches': typeof LaunchesRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/iss': typeof IssRoute
+  '/launches': typeof LaunchesRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/iss': typeof IssRoute
+  '/launches': typeof LaunchesRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/iss' | '/solar'
+  fullPaths: '/' | '/iss' | '/launches' | '/solar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/iss' | '/solar'
-  id: '__root__' | '/' | '/iss' | '/solar'
+  to: '/' | '/iss' | '/launches' | '/solar'
+  id: '__root__' | '/' | '/iss' | '/launches' | '/solar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IssRoute: typeof IssRoute
+  LaunchesRoute: typeof LaunchesRoute
   SolarRoute: typeof SolarRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/solar'
       fullPath: '/solar'
       preLoaderRoute: typeof SolarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/launches': {
+      id: '/launches'
+      path: '/launches'
+      fullPath: '/launches'
+      preLoaderRoute: typeof LaunchesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/iss': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IssRoute: IssRoute,
+  LaunchesRoute: LaunchesRoute,
   SolarRoute: SolarRoute,
 }
 export const routeTree = rootRouteImport
