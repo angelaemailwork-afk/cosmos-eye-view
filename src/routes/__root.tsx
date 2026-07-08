@@ -11,6 +11,13 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import "@fontsource/space-grotesk/400.css";
+import "@fontsource/space-grotesk/600.css";
+import "@fontsource/space-grotesk/700.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import { StarField } from "../components/cosmos/StarField";
+import { Nav } from "../components/cosmos/Nav";
 
 function NotFoundComponent() {
   return (
@@ -77,14 +84,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Cosmos Live — Real-time Space Observatory" },
+      { name: "description", content: "Real-time ISS tracking, solar imagery, rocket launches, and space news. NASA Mission Control in your browser." },
+      { name: "author", content: "Cosmos Live" },
+      { property: "og:title", content: "Cosmos Live — Real-time Space Observatory" },
+      { property: "og:description", content: "Live ISS position, solar activity, upcoming launches, and space news from NASA, ESA, SpaceX & more." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -119,8 +125,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <StarField />
+      <Nav />
+      <main className="min-h-screen">
+        <Outlet />
+      </main>
+      <footer className="border-t border-white/5 mt-24 py-8 text-center text-xs text-muted-foreground">
+        Cosmos Live · Data from NASA, ESA, wheretheiss.at, The Space Devs, Spaceflight News API
+      </footer>
     </QueryClientProvider>
   );
 }
