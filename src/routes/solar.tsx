@@ -112,6 +112,22 @@ function SolarPage() {
             Open fullscreen <ExternalLink className="h-3 w-3" />
           </a>
         </div>
+
+        <div className="mb-4 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-xs text-muted-foreground leading-relaxed">
+          <p>
+            <strong className="text-foreground">Attribution:</strong> NASA Eyes on the Solar System is an
+            official application developed by NASA/JPL-Caltech. It is embedded here via a public iframe for
+            educational and non-commercial purposes. All imagery, telemetry, and 3D assets belong to NASA and
+            its partners.
+          </p>
+          <p className="mt-2">
+            <strong className="text-foreground">Consent note:</strong> Loading the embedded app may send
+            limited technical data (such as your IP address and browser capabilities) to NASA servers so the
+            experience can render correctly. By interacting with the viewer, you consent to NASA’s terms and
+            privacy practices.
+          </p>
+        </div>
+
         <NasaEyesEmbed />
       </div>
     </div>
