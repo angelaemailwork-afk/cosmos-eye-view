@@ -139,10 +139,11 @@ function Metric({ label, value }: { label: string; value: string }) {
 }
 
 function Skeleton({ lines = 3 }: { lines?: number }) {
+  const widths = [82, 71, 90, 68, 95, 77, 86];
   return (
     <div className="mt-4 space-y-2">
       {Array.from({ length: lines }).map((_, i) => (
-        <div key={i} className="h-3 rounded bg-white/5 animate-pulse" style={{ width: `${60 + Math.random() * 40}%` }} />
+        <div key={i} className="h-3 rounded bg-white/5 animate-pulse" style={{ width: `${widths[i % widths.length]}%` }} />
       ))}
     </div>
   );
