@@ -3,7 +3,7 @@ import { useState } from "react";
 import { sdoImageUrl, SDO_WAVELENGTHS } from "@/lib/api";
 import { GlassCard } from "@/components/cosmos/GlassCard";
 import { PageHeader } from "./iss";
-import { Sun, Zap, Waves, ExternalLink } from "lucide-react";
+import { Sun, Zap, Waves, ExternalLink, Orbit } from "lucide-react";
 
 export const Route = createFileRoute("/solar")({
   head: () => ({
@@ -90,6 +90,40 @@ function SolarPage() {
             </p>
           </GlassCard>
         </div>
+      </div>
+
+      <div className="mt-10">
+        <div className="flex items-end justify-between mb-4">
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              <Orbit className="h-4 w-4" /> NASA Eyes on the Solar System
+            </div>
+            <h2 className="mt-1 text-2xl font-semibold">Interactive 3D Solar System</h2>
+            <p className="text-sm text-muted-foreground">
+              Real-time positions of planets, moons, and active spacecraft — powered by NASA/JPL.
+            </p>
+          </div>
+          <a
+            href="https://eyes.nasa.gov/apps/solar-system/#/home"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs inline-flex items-center gap-1 rounded-md glass px-3 py-1.5 hover:bg-primary/10 transition"
+          >
+            Open fullscreen <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <GlassCard glow className="p-2">
+          <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: "16 / 9" }}>
+            <iframe
+              src="https://eyes.nasa.gov/apps/solar-system/#/home"
+              title="NASA Eyes on the Solar System"
+              className="absolute inset-0 h-full w-full"
+              allow="fullscreen; accelerometer; gyroscope; xr-spatial-tracking"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+        </GlassCard>
       </div>
     </div>
   );
