@@ -43,11 +43,12 @@ export function NasaBackdrop() {
                 assets.find((u) => u.endsWith("~medium.jpg")) ||
                 assets.find((u) => u.endsWith("~orig.jpg"));
               if (!large) return null;
-              return {
+              const item: NasaItem = {
                 href: large,
                 title: it.data?.[0]?.title ?? "NASA image",
                 center: it.data?.[0]?.center,
-              } satisfies NasaItem;
+              };
+              return item;
             } catch {
               return null;
             }
