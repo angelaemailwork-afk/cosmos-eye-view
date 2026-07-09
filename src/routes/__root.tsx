@@ -17,6 +17,7 @@ import "@fontsource/space-grotesk/700.css";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import { StarField } from "../components/cosmos/StarField";
+import { NasaBackdrop } from "../components/cosmos/NasaBackdrop";
 import { Nav } from "../components/cosmos/Nav";
 
 function NotFoundComponent() {
@@ -125,6 +126,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <NasaBackdrop />
       <StarField />
       <Nav />
       <main className="min-h-screen">
