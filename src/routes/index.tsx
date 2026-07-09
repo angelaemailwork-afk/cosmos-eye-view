@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { GlassCard } from "@/components/cosmos/GlassCard";
 import { fetchIssPosition, fetchUpcomingLaunches, fetchSpaceNews, sdoImageUrl, formatCountdown } from "@/lib/api";
-import { Rocket, Newspaper, Sun, Satellite, ArrowRight, Sparkles } from "lucide-react";
+import { Rocket, Newspaper, Sun, Satellite, ArrowRight, Sparkles, Camera, Orbit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useMounted } from "@/lib/use-mounted";
 
@@ -42,10 +42,19 @@ function Index() {
           <Link to="/iss" className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-glow hover:brightness-110 transition">
             Track the ISS →
           </Link>
+          <Link to="/apod" className="rounded-lg glass px-5 py-2.5 text-sm font-medium hover:bg-primary/10 transition flex items-center gap-2">
+            <Camera className="h-4 w-4" /> Picture of the Day
+          </Link>
+          <Link to="/mars" className="rounded-lg glass px-5 py-2.5 text-sm font-medium hover:bg-primary/10 transition flex items-center gap-2">
+            <Orbit className="h-4 w-4" /> Mars rovers
+          </Link>
           <Link to="/launches" className="rounded-lg glass px-5 py-2.5 text-sm font-medium hover:bg-primary/10 transition">
             Next launch
           </Link>
         </div>
+        <p className="mt-6 text-xs text-muted-foreground max-w-xl mx-auto">
+          A free educational window into the universe · Built by Angela Samantha Elizebeth Hamlett for students, teachers and everyone who loves the night sky.
+        </p>
       </section>
 
       {/* Live dashboard */}

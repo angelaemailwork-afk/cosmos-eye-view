@@ -1,9 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { Rocket, Newspaper, Sun, Satellite, Home } from "lucide-react";
+import { Rocket, Newspaper, Sun, Satellite, Home, Camera, Orbit, Sparkles } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home", icon: Home },
+  { to: "/apod", label: "Picture of the Day", icon: Camera },
   { to: "/iss", label: "ISS Live", icon: Satellite },
+  { to: "/mars", label: "Mars", icon: Orbit },
   { to: "/solar", label: "Solar", icon: Sun },
   { to: "/launches", label: "Launches", icon: Rocket },
   { to: "/news", label: "News", icon: Newspaper },
@@ -12,6 +14,12 @@ const links = [
 export function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/5 backdrop-blur-xl bg-background/50">
+      <div className="bg-primary/10 border-b border-primary/20 text-center py-1.5 px-4 text-[11px] tracking-wide text-foreground/80 flex items-center justify-center gap-2">
+        <Sparkles className="h-3 w-3 text-primary" />
+        <span>
+          Created by <span className="font-semibold text-foreground">Angela Samantha Elizebeth Hamlett</span> · A free window into the cosmos for science lovers everywhere
+        </span>
+      </div>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="relative h-9 w-9 rounded-lg glass shadow-glow grid place-items-center">

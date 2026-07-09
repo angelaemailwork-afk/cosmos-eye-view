@@ -19,21 +19,39 @@ export function NasaBackdrop() {
     let cancelled = false;
     async function load() {
       try {
-        // Query for recent telescope imagery: JWST, Hubble, Chandra.
-        const q = encodeURIComponent("James Webb Space Telescope");
-        const res = await fetch(
-          `https://images-api.nasa.gov/search?q=${q}&media_type=image&year_start=2022`
+        // Only Hubble + James Webb Space Telescope imagery.
+        const queries = [
+          "James Webb Space Telescope",
+          "Hubble Space Telescope",
+        ];
+        const responses = await Promise.all(
+          queries.map((q) =>
+            fetch(
+              `https://images-api.nasa.gov/search?q=${encodeURIComponent(q)}&media_type=image&keywords=${encodeURIComponent(q)}`
+            ).then((r) => (r.ok ? r.json() : null)).catch(() => null)
+          )
         );
-        if (!res.ok) return;
-        const json = await res.json();
-        const raw = (json?.collection?.items ?? []) as Array<{
+        const raw: Array<{
           href: string;
-          data?: Array<{ title?: string; center?: string; date_created?: string }>;
-        }>;
-
-        // Resolve each collection.json into a large preview image URL.
+          data?: Array<{ title?: string; center?: string; keywords?: string[]; description?: string }>;
+        }> = [];
+        for (const json of responses) {
+          const items = json?.collection?.items ?? [];
+          raw.push(...items);
+        }
+        // Keep only items whose metadata mentions Hubble or JWST.
+        const filteredRaw = raw.filter((it) => {
+          const d = it.data?.[0];
+          const hay = `${d?.title ?? ""} ${(d?.keywords ?? []).join(" ")} ${d?.description ?? ""}`.toLowerCase();
+          return hay.includes("hubble") || hay.includes("webb") || hay.includes("jwst");
+        });
+        // Shuffle then cap before resolving assets.
+        for (let i = filteredRaw.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [filteredRaw[i], filteredRaw[j]] = [filteredRaw[j], filteredRaw[i]];
+        }
         const resolved = await Promise.all(
-          raw.slice(0, 24).map(async (it) => {
+          filteredRaw.slice(0, 30).map(async (it) => {
             try {
               const r = await fetch(it.href);
               if (!r.ok) return null;
@@ -56,13 +74,7 @@ export function NasaBackdrop() {
         );
 
         if (cancelled) return;
-        const filtered = resolved.filter((x): x is NasaItem => !!x);
-        // Shuffle so each visit differs.
-        for (let i = filtered.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
-        }
-        setItems(filtered);
+        setItems(resolved.filter((x): x is NasaItem => !!x));
       } catch {
         /* silently ignore — StarField still renders */
       }

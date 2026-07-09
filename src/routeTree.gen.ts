@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SolarRouteImport } from './routes/solar'
 import { Route as NewsRouteImport } from './routes/news'
+import { Route as MarsRouteImport } from './routes/mars'
 import { Route as LaunchesRouteImport } from './routes/launches'
 import { Route as IssRouteImport } from './routes/iss'
+import { Route as ApodRouteImport } from './routes/apod'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SolarRoute = SolarRouteImport.update({
@@ -25,6 +27,11 @@ const NewsRoute = NewsRouteImport.update({
   path: '/news',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarsRoute = MarsRouteImport.update({
+  id: '/mars',
+  path: '/mars',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LaunchesRoute = LaunchesRouteImport.update({
   id: '/launches',
   path: '/launches',
@@ -35,6 +42,11 @@ const IssRoute = IssRouteImport.update({
   path: '/iss',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApodRoute = ApodRouteImport.update({
+  id: '/apod',
+  path: '/apod',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,38 +55,54 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/apod': typeof ApodRoute
   '/iss': typeof IssRoute
   '/launches': typeof LaunchesRoute
+  '/mars': typeof MarsRoute
   '/news': typeof NewsRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/apod': typeof ApodRoute
   '/iss': typeof IssRoute
   '/launches': typeof LaunchesRoute
+  '/mars': typeof MarsRoute
   '/news': typeof NewsRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/apod': typeof ApodRoute
   '/iss': typeof IssRoute
   '/launches': typeof LaunchesRoute
+  '/mars': typeof MarsRoute
   '/news': typeof NewsRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/iss' | '/launches' | '/news' | '/solar'
+  fullPaths: '/' | '/apod' | '/iss' | '/launches' | '/mars' | '/news' | '/solar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/iss' | '/launches' | '/news' | '/solar'
-  id: '__root__' | '/' | '/iss' | '/launches' | '/news' | '/solar'
+  to: '/' | '/apod' | '/iss' | '/launches' | '/mars' | '/news' | '/solar'
+  id:
+    | '__root__'
+    | '/'
+    | '/apod'
+    | '/iss'
+    | '/launches'
+    | '/mars'
+    | '/news'
+    | '/solar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApodRoute: typeof ApodRoute
   IssRoute: typeof IssRoute
   LaunchesRoute: typeof LaunchesRoute
+  MarsRoute: typeof MarsRoute
   NewsRoute: typeof NewsRoute
   SolarRoute: typeof SolarRoute
 }
@@ -95,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mars': {
+      id: '/mars'
+      path: '/mars'
+      fullPath: '/mars'
+      preLoaderRoute: typeof MarsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/launches': {
       id: '/launches'
       path: '/launches'
@@ -109,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IssRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apod': {
+      id: '/apod'
+      path: '/apod'
+      fullPath: '/apod'
+      preLoaderRoute: typeof ApodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,8 +163,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApodRoute: ApodRoute,
   IssRoute: IssRoute,
   LaunchesRoute: LaunchesRoute,
+  MarsRoute: MarsRoute,
   NewsRoute: NewsRoute,
   SolarRoute: SolarRoute,
 }
