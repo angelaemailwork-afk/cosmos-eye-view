@@ -89,9 +89,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Real-time ISS tracking, solar imagery, rocket launches, and space news. NASA Mission Control in your browser." },
       { name: "author", content: "Cosmos Live" },
       { property: "og:title", content: "Cosmos Live — Real-time Space Observatory" },
-      { property: "og:description", content: "Live ISS position, solar activity, upcoming launches, and space news from NASA, ESA, SpaceX & more." },
+      { property: "og:description", content: "Real-time ISS tracking, solar imagery, rocket launches, and space news. NASA Mission Control in your browser." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Cosmos Live — Real-time Space Observatory" },
+      { name: "twitter:description", content: "Real-time ISS tracking, solar imagery, rocket launches, and space news. NASA Mission Control in your browser." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/4cdab5df-ae25-429b-81b8-8d406ff94e7b" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/4cdab5df-ae25-429b-81b8-8d406ff94e7b" },
     ],
     links: [
       {
