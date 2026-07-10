@@ -24,14 +24,12 @@ export const Route = createFileRoute("/mars")({
 });
 
 const ROVERS = [
-  { id: "curiosity", label: "Curiosity", years: "2012 – present" },
-  { id: "perseverance", label: "Perseverance", years: "2021 – present" },
-  { id: "opportunity", label: "Opportunity", years: "2004 – 2018" },
-  { id: "spirit", label: "Spirit", years: "2004 – 2010" },
+  { id: "mars2020", label: "Perseverance", years: "2021 – present" },
+  { id: "msl", label: "Curiosity", years: "2012 – present" },
 ] as const;
 
 interface RoverPhoto {
-  id: number;
+  id: string | number;
   img_src: string;
   earth_date: string;
   sol: number;
@@ -39,17 +37,52 @@ interface RoverPhoto {
   rover: { name: string };
 }
 
-async function fetchLatest(rover: string): Promise<RoverPhoto[]> {
+interface MarsFeedItem {
+  id?: number | string;
+  imageid?: string;
+  image_files?: { full_res?: string; large?: string; medium?: string; small?: string };
+  full_res?: string;
+  sol?: number;
+  date_taken_utc?: string;
+  date_taken_mars?: string;
+  earth_date?: string;
+  camera?: { camera?: string; instrument?: string; full_name?: string };
+  instrument?: string;
+}
+
+async function fetchLatest(rover: "mars2020" | "msl"): Promise<RoverPhoto[]> {
   const res = await fetch(
-    `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/latest_photos?api_key=DEMO_KEY`
+    `https://mars.nasa.gov/rss/api/?feed=raw_images&category=${rover}&feedtype=json&num=50&order=sol+desc`,
   );
-  if (!res.ok) throw new Error("Mars photos unavailable — NASA API may be rate-limited.");
+  if (!res.ok) throw new Error("Mars photos temporarily unavailable.");
   const json = await res.json();
-  return (json.latest_photos ?? []) as RoverPhoto[];
+  const items = (json.images ?? []) as MarsFeedItem[];
+  const roverName = rover === "mars2020" ? "Perseverance" : "Curiosity";
+  return items.map((it, idx) => {
+    const img =
+      it.image_files?.large ||
+      it.image_files?.full_res ||
+      it.image_files?.medium ||
+      it.image_files?.small ||
+      it.full_res ||
+      "";
+    const earth = (it.date_taken_utc || it.earth_date || "").slice(0, 10);
+    return {
+      id: it.imageid ?? it.id ?? idx,
+      img_src: img,
+      earth_date: earth,
+      sol: it.sol ?? 0,
+      camera: {
+        full_name: it.camera?.instrument || it.camera?.full_name || it.instrument || "Rover camera",
+        name: it.camera?.camera || it.camera?.instrument || "",
+      },
+      rover: { name: roverName },
+    } satisfies RoverPhoto;
+  }).filter((p) => p.img_src);
 }
 
 function MarsPage() {
-  const [rover, setRover] = useState<(typeof ROVERS)[number]["id"]>("perseverance");
+  const [rover, setRover] = useState<(typeof ROVERS)[number]["id"]>("mars2020");
   const q = useQuery({
     queryKey: ["mars", rover],
     queryFn: () => fetchLatest(rover),
@@ -100,8 +133,7 @@ function MarsPage() {
         {q.error && (
           <GlassCard>
             <div className="text-sm text-destructive">
-              Couldn&apos;t reach NASA&apos;s Mars Rover API. It rate-limits demo traffic — try another rover
-              or refresh in a moment.
+              Couldn&apos;t reach NASA&apos;s Mars raw-image feed. Try the other rover or refresh in a moment.
             </div>
           </GlassCard>
         )}
