@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SolarRouteImport } from './routes/solar'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MarsRouteImport } from './routes/mars'
 import { Route as LaunchesRouteImport } from './routes/launches'
@@ -20,6 +21,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SolarRoute = SolarRouteImport.update({
   id: '/solar',
   path: '/solar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRoute = NewsRouteImport.update({
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/launches': typeof LaunchesRoute
   '/mars': typeof MarsRoute
   '/news': typeof NewsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/launches': typeof LaunchesRoute
   '/mars': typeof MarsRoute
   '/news': typeof NewsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRoutesById {
@@ -79,13 +87,30 @@ export interface FileRoutesById {
   '/launches': typeof LaunchesRoute
   '/mars': typeof MarsRoute
   '/news': typeof NewsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/apod' | '/iss' | '/launches' | '/mars' | '/news' | '/solar'
+  fullPaths:
+    | '/'
+    | '/apod'
+    | '/iss'
+    | '/launches'
+    | '/mars'
+    | '/news'
+    | '/sitemap.xml'
+    | '/solar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/apod' | '/iss' | '/launches' | '/mars' | '/news' | '/solar'
+  to:
+    | '/'
+    | '/apod'
+    | '/iss'
+    | '/launches'
+    | '/mars'
+    | '/news'
+    | '/sitemap.xml'
+    | '/solar'
   id:
     | '__root__'
     | '/'
@@ -94,6 +119,7 @@ export interface FileRouteTypes {
     | '/launches'
     | '/mars'
     | '/news'
+    | '/sitemap.xml'
     | '/solar'
   fileRoutesById: FileRoutesById
 }
@@ -104,6 +130,7 @@ export interface RootRouteChildren {
   LaunchesRoute: typeof LaunchesRoute
   MarsRoute: typeof MarsRoute
   NewsRoute: typeof NewsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SolarRoute: typeof SolarRoute
 }
 
@@ -114,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/solar'
       fullPath: '/solar'
       preLoaderRoute: typeof SolarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news': {
@@ -168,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   LaunchesRoute: LaunchesRoute,
   MarsRoute: MarsRoute,
   NewsRoute: NewsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SolarRoute: SolarRoute,
 }
 export const routeTree = rootRouteImport
