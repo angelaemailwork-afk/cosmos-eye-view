@@ -139,7 +139,7 @@ function RootComponent() {
       </main>
       <footer className="border-t border-white/5 mt-24 py-8 text-center text-xs text-muted-foreground space-y-1.5">
         <div>
-          Cosmos Live · Created by <span className="text-foreground font-medium">Angela Samantha Elizebeth Hamlett</span> · Free for education & public use
+          Cosmos Live · Created by <span className="text-foreground font-medium">Angela_seh</span> · Free for education & public use
         </div>
         <div>Data from NASA, ESA, wheretheiss.at, The Space Devs, Spaceflight News API</div>
         <div className="pt-1"><VisitorCounter /></div>
