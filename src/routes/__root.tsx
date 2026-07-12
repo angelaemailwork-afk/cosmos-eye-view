@@ -20,6 +20,9 @@ import { StarField } from "../components/cosmos/StarField";
 import { NasaBackdrop } from "../components/cosmos/NasaBackdrop";
 import { Nav } from "../components/cosmos/Nav";
 import { VisitorCounter } from "../components/cosmos/VisitorCounter";
+import { ClientOnly } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
+const AmbientSound = lazy(() => import("../components/cosmos/AmbientSound").then((m) => ({ default: m.AmbientSound })));
 
 function NotFoundComponent() {
   return (
@@ -144,6 +147,9 @@ function RootComponent() {
         <div>Data from NASA, ESA, wheretheiss.at, The Space Devs, Spaceflight News API</div>
         <div className="pt-1"><VisitorCounter /></div>
       </footer>
+      <ClientOnly fallback={null}>
+        <Suspense fallback={null}><AmbientSound /></Suspense>
+      </ClientOnly>
     </QueryClientProvider>
   );
 }
