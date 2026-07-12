@@ -12,23 +12,4 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
-  vite: {
-    build: {
-      cssCodeSplit: true,
-      rollupOptions: {
-        output: {
-          // Split heavy vendor libs into their own chunks so the initial
-          // page bundle stays small and Three.js only loads on /iss.
-          manualChunks(id) {
-            if (!id.includes("node_modules")) return;
-            if (id.includes("/three/") || id.includes("@react-three/")) return "three";
-            if (id.includes("framer-motion")) return "motion";
-            if (id.includes("recharts") || id.includes("d3-")) return "charts";
-            if (id.includes("@radix-ui/")) return "radix";
-            if (id.includes("lucide-react")) return "icons";
-          },
-        },
-      },
-    },
-  },
 });
