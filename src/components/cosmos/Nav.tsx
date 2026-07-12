@@ -17,7 +17,7 @@ export function Nav() {
       <div className="bg-primary/10 border-b border-primary/20 text-center py-1.5 px-4 text-[11px] tracking-wide text-foreground/80 flex items-center justify-center gap-2">
         <Sparkles className="h-3 w-3 text-primary" />
         <span>
-          Created by <span className="font-semibold text-foreground">Angela Samantha Elizebeth Hamlett</span> · A free window into the cosmos for science lovers everywhere
+          Created by <span className="font-semibold text-foreground">Angela_seh</span> · A free window into the cosmos for science lovers everywhere
         </span>
       </div>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
