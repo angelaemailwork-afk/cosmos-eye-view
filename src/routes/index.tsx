@@ -53,7 +53,7 @@ function Index() {
           </Link>
         </div>
         <p className="mt-6 text-xs text-muted-foreground max-w-xl mx-auto">
-          A free educational window into the universe · Built by Angela Samantha Elizebeth Hamlett for students, teachers and everyone who loves the night sky.
+          A free educational window into the universe · Built by Angela_seh for students, teachers and everyone who loves the night sky.
         </p>
       </section>
 
