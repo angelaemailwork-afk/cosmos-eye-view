@@ -140,6 +140,7 @@ function SolarView({ wavelength }: { wavelength: (typeof SDO_WAVELENGTHS)[number
   return (
     <div className="relative rounded-xl overflow-hidden bg-black aspect-square shadow-glow">
       <img src={sdoImageUrl(wavelength.code, 1024)} alt={`Latest ${wavelength.label} solar image`}
+        loading="lazy" decoding="async"
         className="h-full w-full object-cover" />
       <div className="absolute bottom-2 left-2 text-[10px] uppercase tracking-widest px-2 py-1 rounded bg-black/60">
         {wavelength.label}
