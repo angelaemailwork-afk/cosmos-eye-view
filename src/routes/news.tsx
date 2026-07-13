@@ -63,8 +63,20 @@ function NewsPage() {
           <a key={a.id} href={a.url} target="_blank" rel="noreferrer" className="group">
             <GlassCard className="p-0 overflow-hidden h-full flex flex-col">
               <div className="aspect-video overflow-hidden bg-black/40">
-                <img src={a.image_url} alt="" loading="lazy"
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                {a.image_url ? (
+                  <img
+                    src={a.image_url}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                    onError={(e) => {
+                      const el = e.currentTarget;
+                      el.style.display = "none";
+                    }}
+                  />
+                ) : null}
               </div>
               <div className="p-5 flex-1 flex flex-col">
                 <div className="text-[10px] uppercase tracking-widest text-primary">
