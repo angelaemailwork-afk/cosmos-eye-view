@@ -17,6 +17,7 @@ import { Route as LaunchesRouteImport } from './routes/launches'
 import { Route as IssRouteImport } from './routes/iss'
 import { Route as ApodRouteImport } from './routes/apod'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicLaunchesRouteImport } from './routes/api/public/launches'
 import { Route as ApiPublicApodRouteImport } from './routes/api/public/apod'
 
 const SolarRoute = SolarRouteImport.update({
@@ -59,6 +60,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLaunchesRoute = ApiPublicLaunchesRouteImport.update({
+  id: '/api/public/launches',
+  path: '/api/public/launches',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicApodRoute = ApiPublicApodRouteImport.update({
   id: '/api/public/apod',
   path: '/api/public/apod',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
   '/api/public/apod': typeof ApiPublicApodRoute
+  '/api/public/launches': typeof ApiPublicLaunchesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
   '/api/public/apod': typeof ApiPublicApodRoute
+  '/api/public/launches': typeof ApiPublicLaunchesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
   '/api/public/apod': typeof ApiPublicApodRoute
+  '/api/public/launches': typeof ApiPublicLaunchesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/solar'
     | '/api/public/apod'
+    | '/api/public/launches'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/solar'
     | '/api/public/apod'
+    | '/api/public/launches'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/solar'
     | '/api/public/apod'
+    | '/api/public/launches'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +157,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SolarRoute: typeof SolarRoute
   ApiPublicApodRoute: typeof ApiPublicApodRoute
+  ApiPublicLaunchesRoute: typeof ApiPublicLaunchesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/launches': {
+      id: '/api/public/launches'
+      path: '/api/public/launches'
+      fullPath: '/api/public/launches'
+      preLoaderRoute: typeof ApiPublicLaunchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/apod': {
       id: '/api/public/apod'
       path: '/api/public/apod'
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SolarRoute: SolarRoute,
   ApiPublicApodRoute: ApiPublicApodRoute,
+  ApiPublicLaunchesRoute: ApiPublicLaunchesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
