@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Rocket, Newspaper, Sun, Satellite, Home, Camera, Orbit, Sparkles } from "lucide-react";
+import { Rocket, Newspaper, Sun, Satellite, Home, Camera, Orbit, Sparkles, ExternalLink } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home", icon: Home },
