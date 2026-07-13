@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Rocket, Newspaper, Sun, Satellite, Home, Camera, Orbit, Sparkles } from "lucide-react";
+import { Rocket, Newspaper, Sun, Satellite, Home, Camera, Orbit, Sparkles, ExternalLink } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home", icon: Home },
@@ -43,9 +43,22 @@ export function Nav() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-          <span className="hidden sm:inline">Live telemetry</span>
+        <div className="flex items-center gap-3">
+          <a
+            href="https://linktr.ee/LinktreeAngela"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/20 transition-colors"
+          >
+            <Sparkles className="h-3 w-3" />
+            <span className="hidden sm:inline">Angela’s links</span>
+            <span className="sm:hidden">Links</span>
+            <ExternalLink className="h-3 w-3 opacity-70" />
+          </a>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+            <span className="hidden sm:inline">Live telemetry</span>
+          </div>
         </div>
       </div>
       {/* mobile */}
