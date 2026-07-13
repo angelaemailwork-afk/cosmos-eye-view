@@ -41,7 +41,7 @@ export interface Launch {
 }
 
 export async function fetchUpcomingLaunches(limit = 12): Promise<Launch[]> {
-  const res = await fetch(`https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=${limit}&mode=list`);
+  const res = await fetch(`/api/public/launches?limit=${limit}`);
   if (!res.ok) throw new Error("Launches API failed");
   const json = await res.json();
   return json.results ?? [];
@@ -58,7 +58,7 @@ export interface NewsArticle {
 }
 
 export async function fetchSpaceNews(limit = 15): Promise<NewsArticle[]> {
-  const res = await fetch(`https://api.spaceflightnewsapi.net/v4/articles/?limit=${limit}`);
+  const res = await fetch(`/api/public/news?limit=${limit}`);
   if (!res.ok) throw new Error("News API failed");
   const json = await res.json();
   return json.results ?? [];

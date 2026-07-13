@@ -17,6 +17,7 @@ import { Route as LaunchesRouteImport } from './routes/launches'
 import { Route as IssRouteImport } from './routes/iss'
 import { Route as ApodRouteImport } from './routes/apod'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicNewsRouteImport } from './routes/api/public/news'
 import { Route as ApiPublicLaunchesRouteImport } from './routes/api/public/launches'
 import { Route as ApiPublicApodRouteImport } from './routes/api/public/apod'
 
@@ -60,6 +61,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicNewsRoute = ApiPublicNewsRouteImport.update({
+  id: '/api/public/news',
+  path: '/api/public/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicLaunchesRoute = ApiPublicLaunchesRouteImport.update({
   id: '/api/public/launches',
   path: '/api/public/launches',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/solar': typeof SolarRoute
   '/api/public/apod': typeof ApiPublicApodRoute
   '/api/public/launches': typeof ApiPublicLaunchesRoute
+  '/api/public/news': typeof ApiPublicNewsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/solar': typeof SolarRoute
   '/api/public/apod': typeof ApiPublicApodRoute
   '/api/public/launches': typeof ApiPublicLaunchesRoute
+  '/api/public/news': typeof ApiPublicNewsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/solar': typeof SolarRoute
   '/api/public/apod': typeof ApiPublicApodRoute
   '/api/public/launches': typeof ApiPublicLaunchesRoute
+  '/api/public/news': typeof ApiPublicNewsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/solar'
     | '/api/public/apod'
     | '/api/public/launches'
+    | '/api/public/news'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/solar'
     | '/api/public/apod'
     | '/api/public/launches'
+    | '/api/public/news'
   id:
     | '__root__'
     | '/'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/solar'
     | '/api/public/apod'
     | '/api/public/launches'
+    | '/api/public/news'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,6 +170,7 @@ export interface RootRouteChildren {
   SolarRoute: typeof SolarRoute
   ApiPublicApodRoute: typeof ApiPublicApodRoute
   ApiPublicLaunchesRoute: typeof ApiPublicLaunchesRoute
+  ApiPublicNewsRoute: typeof ApiPublicNewsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/news': {
+      id: '/api/public/news'
+      path: '/api/public/news'
+      fullPath: '/api/public/news'
+      preLoaderRoute: typeof ApiPublicNewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/launches': {
       id: '/api/public/launches'
       path: '/api/public/launches'
@@ -246,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   SolarRoute: SolarRoute,
   ApiPublicApodRoute: ApiPublicApodRoute,
   ApiPublicLaunchesRoute: ApiPublicLaunchesRoute,
+  ApiPublicNewsRoute: ApiPublicNewsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
