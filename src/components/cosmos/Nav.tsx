@@ -48,12 +48,13 @@ export function Nav() {
             href="https://linktr.ee/LinktreeAngela"
             target="_blank"
             rel="noreferrer"
-            aria-label="Whole — Angela’s Linktree with contacts and donation options (opens in a new tab)"
-            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-sm hover:bg-primary/25 hover:shadow-glow hover:-translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            aria-label="Angela’s links — contacts and donation page on Linktree (opens in a new tab)"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/50 bg-primary/25 px-3.5 py-2 text-xs font-semibold text-white shadow-glow hover:bg-primary/40 hover:shadow-[0_0_50px_rgba(0,180,216,0.35)] hover:-translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            <Sparkles className="h-3 w-3 text-primary" />
-            <span>Whole</span>
-            <ExternalLink className="h-3 w-3 opacity-70" />
+            <Sparkles className="h-3.5 w-3.5 text-white" />
+            <span className="hidden sm:inline">Angela’s links</span>
+            <span className="sm:hidden">Angela</span>
+            <ExternalLink className="h-3 w-3 text-white/80" />
           </a>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
