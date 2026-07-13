@@ -48,11 +48,11 @@ export function Nav() {
             href="https://linktr.ee/LinktreeAngela"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/20 transition-colors"
+            aria-label="Whole — Angela’s Linktree with contacts and donation options (opens in a new tab)"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-sm hover:bg-primary/25 hover:shadow-glow hover:-translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            <Sparkles className="h-3 w-3" />
-            <span className="hidden sm:inline">Angela’s links</span>
-            <span className="sm:hidden">Links</span>
+            <Sparkles className="h-3 w-3 text-primary" />
+            <span>Whole</span>
             <ExternalLink className="h-3 w-3 opacity-70" />
           </a>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
