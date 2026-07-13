@@ -31,6 +31,9 @@ interface Apod {
   hdurl?: string;
   media_type: "image" | "video";
   copyright?: string;
+  thumbnail_url?: string;
+  _servedDate?: string;
+  _fallback?: boolean;
 }
 
 function toYmd(d: Date) {
@@ -108,18 +111,28 @@ function ApodPage() {
         )}
         {q.error && (
           <div className="text-sm text-destructive">
-            Couldn&apos;t load APOD for {date}. NASA&apos;s demo API is rate-limited — try another date.
+            {(q.error as Error)?.message || "Couldn't load APOD. Try another date in a moment."}
           </div>
         )}
         {q.data && (
           <>
+            {q.data._fallback && q.data._servedDate && q.data._servedDate !== date && (
+              <div className="mb-3 text-xs text-amber-300/90">
+                NASA hasn&apos;t published {date} yet (or it&apos;s rate-limited) — showing {q.data._servedDate} instead.
+              </div>
+            )}
             <div className="rounded-lg overflow-hidden bg-black/40">
               {q.data.media_type === "image" ? (
                 <img
-                  src={q.data.hdurl || q.data.url}
+                  src={q.data.url || q.data.hdurl}
                   alt={q.data.title}
                   className="w-full h-auto object-contain"
                   loading="eager"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (q.data?.hdurl && img.src !== q.data.hdurl) img.src = q.data.hdurl;
+                    else if (q.data?.thumbnail_url) img.src = q.data.thumbnail_url;
+                  }}
                 />
               ) : (
                 <div className="aspect-video">
