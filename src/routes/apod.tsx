@@ -38,10 +38,13 @@ function toYmd(d: Date) {
 }
 
 async function fetchApod(date: string): Promise<Apod> {
-  const res = await fetch(
-    `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${date}`
-  );
-  if (!res.ok) throw new Error("APOD unavailable — try again in a moment.");
+  // Hits our own edge-cached server route which walks back through recent
+  // days if NASA is rate-limiting the requested date.
+  const res = await fetch(`/api/public/apod?date=${date}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.message || "APOD unavailable — try again shortly.");
+  }
   return res.json();
 }
 
