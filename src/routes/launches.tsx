@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { fetchUpcomingLaunches, formatCountdown, type Launch } from "@/lib/api";
+import { fetchUpcomingLaunchesFull, formatCountdown, type Launch } from "@/lib/api";
 import { GlassCard } from "@/components/cosmos/GlassCard";
 import { PageHeader } from "./iss";
 import { Rocket, MapPin, ExternalLink, Radio } from "lucide-react";
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/launches")({
 });
 
 function LaunchesPage() {
-  const q = useQuery({ queryKey: ["launches"], queryFn: () => fetchUpcomingLaunches(20), staleTime: 60_000 });
+  const q = useQuery({ queryKey: ["launches", "full", 20], queryFn: () => fetchUpcomingLaunchesFull(20), staleTime: 60_000 });
   const [, tick] = useState(0);
   useEffect(() => { const i = setInterval(() => tick((t) => t + 1), 1000); return () => clearInterval(i); }, []);
 
@@ -35,8 +35,19 @@ function LaunchesPage() {
       {q.isLoading && <div className="mt-8 text-center text-muted-foreground">Loading launch manifest…</div>}
       {q.error && <div className="mt-8 text-center text-destructive">Failed to load launches.</div>}
 
+      {q.data?.stale && (
+        <div className="mt-6 rounded-lg border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-xs text-amber-200">
+          The Space Devs Launch Library is rate-limited right now — showing the last cached manifest.
+        </div>
+      )}
+      {q.data && !q.data.results.length && (
+        <div className="mt-8 text-center text-muted-foreground text-sm">
+          Launch manifest is temporarily unavailable. Please check back in a minute.
+        </div>
+      )}
+
       <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {q.data?.map((l) => <LaunchCard key={l.id} launch={l} />)}
+        {q.data?.results.map((l) => <LaunchCard key={l.id} launch={l} />)}
       </div>
     </div>
   );
