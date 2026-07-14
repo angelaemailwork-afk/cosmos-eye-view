@@ -15,6 +15,7 @@ import { Route as NewsRouteImport } from './routes/news'
 import { Route as MarsRouteImport } from './routes/mars'
 import { Route as LaunchesRouteImport } from './routes/launches'
 import { Route as IssRouteImport } from './routes/iss'
+import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as ApodRouteImport } from './routes/apod'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicNewsRouteImport } from './routes/api/public/news'
@@ -51,6 +52,11 @@ const IssRoute = IssRouteImport.update({
   path: '/iss',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApodRoute = ApodRouteImport.update({
   id: '/apod',
   path: '/apod',
@@ -80,6 +86,7 @@ const ApiPublicApodRoute = ApiPublicApodRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/apod': typeof ApodRoute
+  '/explore': typeof ExploreRoute
   '/iss': typeof IssRoute
   '/launches': typeof LaunchesRoute
   '/mars': typeof MarsRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/apod': typeof ApodRoute
+  '/explore': typeof ExploreRoute
   '/iss': typeof IssRoute
   '/launches': typeof LaunchesRoute
   '/mars': typeof MarsRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/apod': typeof ApodRoute
+  '/explore': typeof ExploreRoute
   '/iss': typeof IssRoute
   '/launches': typeof LaunchesRoute
   '/mars': typeof MarsRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/apod'
+    | '/explore'
     | '/iss'
     | '/launches'
     | '/mars'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/apod'
+    | '/explore'
     | '/iss'
     | '/launches'
     | '/mars'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/apod'
+    | '/explore'
     | '/iss'
     | '/launches'
     | '/mars'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApodRoute: typeof ApodRoute
+  ExploreRoute: typeof ExploreRoute
   IssRoute: typeof IssRoute
   LaunchesRoute: typeof LaunchesRoute
   MarsRoute: typeof MarsRoute
@@ -217,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IssRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/apod': {
       id: '/apod'
       path: '/apod'
@@ -258,6 +278,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApodRoute: ApodRoute,
+  ExploreRoute: ExploreRoute,
   IssRoute: IssRoute,
   LaunchesRoute: LaunchesRoute,
   MarsRoute: MarsRoute,

@@ -40,11 +40,26 @@ export interface Launch {
   vidURLs?: Array<{ url: string }>;
 }
 
+export interface LaunchesResult {
+  results: Launch[];
+  stale?: boolean;
+  fallback?: boolean;
+}
+
 export async function fetchUpcomingLaunches(limit = 12): Promise<Launch[]> {
+  const { results } = await fetchUpcomingLaunchesFull(limit);
+  return results;
+}
+
+export async function fetchUpcomingLaunchesFull(limit = 12): Promise<LaunchesResult> {
   const res = await fetch(`/api/public/launches?limit=${limit}`);
   if (!res.ok) throw new Error("Launches API failed");
   const json = await res.json();
-  return json.results ?? [];
+  return {
+    results: json.results ?? [],
+    stale: Boolean(json._stale),
+    fallback: Boolean(json.fallback),
+  };
 }
 
 export interface NewsArticle {
