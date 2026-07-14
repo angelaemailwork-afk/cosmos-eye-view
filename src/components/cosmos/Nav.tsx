@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Rocket, Newspaper, Sun, Satellite, Home, Camera, Orbit, Sparkles, ExternalLink } from "lucide-react";
+import { Rocket, Newspaper, Sun, Satellite, Home, Camera, Orbit, Sparkles, ExternalLink, Telescope } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home", icon: Home },
@@ -7,6 +7,7 @@ const links = [
   { to: "/iss", label: "ISS Live", icon: Satellite },
   { to: "/mars", label: "Mars", icon: Orbit },
   { to: "/solar", label: "Solar", icon: Sun },
+  { to: "/explore", label: "Explore 3D", icon: Telescope },
   { to: "/launches", label: "Launches", icon: Rocket },
   { to: "/news", label: "News", icon: Newspaper },
 ] as const;
