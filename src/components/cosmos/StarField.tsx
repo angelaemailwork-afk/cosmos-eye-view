@@ -6,7 +6,8 @@ export function StarField() {
   useEffect(() => setMounted(true), []);
 
   const stars = useMemo(() => {
-    return Array.from({ length: 140 }).map((_, i) => ({
+    // Fewer animated DOM nodes = cheaper first paint on low-end devices.
+    return Array.from({ length: 80 }).map((_, i) => ({
       id: i,
       top: Math.random() * 100,
       left: Math.random() * 100,
