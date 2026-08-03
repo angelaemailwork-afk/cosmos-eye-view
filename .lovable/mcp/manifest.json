@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://eiabhotpvazdgzdjrzao.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "cosmos-chronicle",
+      "version": "0.1.0",
+      "title": "Cosmos Chronicle"
+    },
+    "tools": [
+      {
+        "name": "get_astronomy_picture_of_the_day",
+        "title": "Astronomy Picture of the Day",
+        "description": "Get NASA's Astronomy Picture of the Day: title, explanation and image/video URL. Optionally pass a date (YYYY-MM-DD, from 1995-06-16 onwards).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "date": {
+              "description": "Date in YYYY-MM-DD format. Defaults to today.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_iss_position",
+        "title": "ISS live position",
+        "description": "Get the current position of the International Space Station: latitude, longitude, altitude (km), velocity (km/h) and daylight visibility.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_upcoming_launches",
+        "title": "Upcoming rocket launches",
+        "description": "List upcoming worldwide rocket launches with mission name, provider, launch pad, scheduled time (NET) and status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "How many launches to return (1-30, default 10).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_space_news",
+        "title": "Latest space news",
+        "description": "List the latest spaceflight and astronomy news articles with title, source, publish date, summary and link.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "How many articles to return (1-30, default 10).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "search": {
+              "description": "Optional keyword to filter article titles.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_mars_rover_photos",
+        "title": "Mars rover photos",
+        "description": "Get the latest raw images from a NASA Mars rover (perseverance or curiosity), with camera name, sol and image URL.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "rover": {
+              "type": "string",
+              "enum": [
+                "perseverance",
+                "curiosity"
+              ],
+              "description": "Which rover's raw image feed to read."
+            },
+            "limit": {
+              "description": "How many photos to return (1-25, default 10).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "rover"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
