@@ -14,6 +14,9 @@ export const Route = createFileRoute("/news")({
       { property: "og:title", content: "Space News — Cosmos Live" },
       { property: "og:description", content: "Breaking space news from every major agency and provider." },
     ],
+    links: [
+      { rel: "preload", as: "fetch", href: "/api/public/news?limit=40", crossOrigin: "anonymous" },
+    ],
   }),
   component: NewsPage,
 });

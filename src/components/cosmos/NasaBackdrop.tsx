@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 interface NasaItem {
   href: string;
   title: string;
-  center?: string;
+}
+
+/** Run work after first paint / when the browser is idle. */
+function whenIdle(fn: () => void) {
+  const w = window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+  if (typeof w.requestIdleCallback === "function") w.requestIdleCallback(fn, { timeout: 3000 });
+  else setTimeout(fn, 1200);
 }
 
 /**
@@ -14,72 +20,27 @@ interface NasaItem {
 export function NasaBackdrop() {
   const [items, setItems] = useState<NasaItem[]>([]);
   const [index, setIndex] = useState(0);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     async function load() {
       try {
-        // Only Hubble + James Webb Space Telescope imagery.
-        const queries = [
-          "James Webb Space Telescope",
-          "Hubble Space Telescope",
-        ];
-        const responses = await Promise.all(
-          queries.map((q) =>
-            fetch(
-              `https://images-api.nasa.gov/search?q=${encodeURIComponent(q)}&media_type=image&keywords=${encodeURIComponent(q)}`
-            ).then((r) => (r.ok ? r.json() : null)).catch(() => null)
-          )
-        );
-        const raw: Array<{
-          href: string;
-          data?: Array<{ title?: string; center?: string; keywords?: string[]; description?: string }>;
-        }> = [];
-        for (const json of responses) {
-          const items = json?.collection?.items ?? [];
-          raw.push(...items);
-        }
-        // Keep only items whose metadata mentions Hubble or JWST.
-        const filteredRaw = raw.filter((it) => {
-          const d = it.data?.[0];
-          const hay = `${d?.title ?? ""} ${(d?.keywords ?? []).join(" ")} ${d?.description ?? ""}`.toLowerCase();
-          return hay.includes("hubble") || hay.includes("webb") || hay.includes("jwst");
-        });
-        // Shuffle then cap before resolving assets.
-        for (let i = filteredRaw.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [filteredRaw[i], filteredRaw[j]] = [filteredRaw[j], filteredRaw[i]];
-        }
-        const resolved = await Promise.all(
-          filteredRaw.slice(0, 30).map(async (it) => {
-            try {
-              const r = await fetch(it.href);
-              if (!r.ok) return null;
-              const assets: string[] = await r.json();
-              const large =
-                assets.find((u) => u.endsWith("~large.jpg")) ||
-                assets.find((u) => u.endsWith("~medium.jpg")) ||
-                assets.find((u) => u.endsWith("~orig.jpg"));
-              if (!large) return null;
-              const item: NasaItem = {
-                href: large,
-                title: it.data?.[0]?.title ?? "NASA image",
-                center: it.data?.[0]?.center,
-              };
-              return item;
-            } catch {
-              return null;
-            }
-          })
-        );
-
+        // Single small, edge-cached request — the heavy NASA fan-out now
+        // happens on the server, not in every visitor's browser.
+        const r = await fetch("/api/public/backdrop");
+        if (!r.ok) return;
+        const json: { items?: NasaItem[] } = await r.json();
         if (cancelled) return;
-        setItems(resolved.filter((x): x is NasaItem => !!x));
+        setItems(json.items ?? []);
       } catch {
         /* silently ignore — StarField still renders */
       }
     }
-    load();
+    // Deferred so it never competes with the page's own data + JS.
+    whenIdle(() => {
+      if (!cancelled) load();
+    });
     return () => {
       cancelled = true;
     };
@@ -104,12 +65,14 @@ export function NasaBackdrop() {
           alt=""
           className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ease-in-out"
           style={{
-            opacity: i === 0 ? 0.55 : 0,
+            opacity: i === 0 && ready ? 0.55 : 0,
             transform: "scale(1.08)",
             filter: "saturate(1.05) contrast(1.05)",
           }}
-          loading="eager"
+          loading="lazy"
           decoding="async"
+          fetchPriority="low"
+          onLoad={i === 0 ? () => setReady(true) : undefined}
         />
       ))}
       {/* darken for legibility */}

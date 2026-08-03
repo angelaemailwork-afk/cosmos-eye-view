@@ -8,6 +8,20 @@ import { useEffect, useState } from "react";
 import { useMounted } from "@/lib/use-mounted";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Cosmos Live — Live Space Mission Control" },
+      { name: "description", content: "Live ISS telemetry, near real-time solar imagery, upcoming rocket launches and space news in one mission control dashboard." },
+      { property: "og:title", content: "Cosmos Live — Live Space Mission Control" },
+      { property: "og:description", content: "Live ISS telemetry, solar imagery, launch countdowns and space news, all in real time." },
+    ],
+    links: [
+      // Start the data fetches before hydration finishes.
+      { rel: "preload", as: "fetch", href: "/api/public/launches?limit=3", crossOrigin: "anonymous" },
+      { rel: "preload", as: "fetch", href: "/api/public/news?limit=3", crossOrigin: "anonymous" },
+      { rel: "preload", as: "image", href: "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0304.jpg" },
+    ],
+  }),
   component: Index,
 });
 

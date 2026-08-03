@@ -107,6 +107,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      // Warm up the sockets for the live data + imagery hosts while the
+      // JS bundle is still downloading.
+      { rel: "preconnect", href: "https://api.wheretheiss.at", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://sdo.gsfc.nasa.gov" },
+      { rel: "dns-prefetch", href: "https://images-assets.nasa.gov" },
     ],
   }),
   shellComponent: RootShell,

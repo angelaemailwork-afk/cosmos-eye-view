@@ -15,6 +15,9 @@ export const Route = createFileRoute("/launches")({
       { property: "og:title", content: "Upcoming Rocket Launches — Cosmos Live" },
       { property: "og:description", content: "Track every upcoming launch with live T-minus countdowns." },
     ],
+    links: [
+      { rel: "preload", as: "fetch", href: "/api/public/launches?limit=20", crossOrigin: "anonymous" },
+    ],
   }),
   component: LaunchesPage,
 });
