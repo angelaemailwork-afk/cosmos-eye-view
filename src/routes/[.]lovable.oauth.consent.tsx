@@ -102,7 +102,7 @@ function Consent() {
         )}
         {scopes.length > 0 && (
           <ul className="mt-4 space-y-1 text-xs text-muted-foreground">
-            {scopes.map((s) => (
+            {scopes.map((s: string) => (
               <li key={s}>
                 {s === "email"
                   ? "Share your email address"
