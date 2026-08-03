@@ -24,6 +24,7 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ApiPublicNewsRouteImport } from './routes/api/public/news'
 import { Route as ApiPublicLaunchesRouteImport } from './routes/api/public/launches'
+import { Route as ApiPublicBackdropRouteImport } from './routes/api/public/backdrop'
 import { Route as ApiPublicApodRouteImport } from './routes/api/public/apod'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -105,6 +106,11 @@ const ApiPublicLaunchesRoute = ApiPublicLaunchesRouteImport.update({
   path: '/api/public/launches',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBackdropRoute = ApiPublicBackdropRouteImport.update({
+  id: '/api/public/backdrop',
+  path: '/api/public/backdrop',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicApodRoute = ApiPublicApodRouteImport.update({
   id: '/api/public/apod',
   path: '/api/public/apod',
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/apod': typeof ApiPublicApodRoute
+  '/api/public/backdrop': typeof ApiPublicBackdropRoute
   '/api/public/launches': typeof ApiPublicLaunchesRoute
   '/api/public/news': typeof ApiPublicNewsRoute
 }
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/apod': typeof ApiPublicApodRoute
+  '/api/public/backdrop': typeof ApiPublicBackdropRoute
   '/api/public/launches': typeof ApiPublicLaunchesRoute
   '/api/public/news': typeof ApiPublicNewsRoute
 }
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/apod': typeof ApiPublicApodRoute
+  '/api/public/backdrop': typeof ApiPublicBackdropRoute
   '/api/public/launches': typeof ApiPublicLaunchesRoute
   '/api/public/news': typeof ApiPublicNewsRoute
 }
@@ -202,6 +211,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/apod'
+    | '/api/public/backdrop'
     | '/api/public/launches'
     | '/api/public/news'
   fileRoutesByTo: FileRoutesByTo
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/apod'
+    | '/api/public/backdrop'
     | '/api/public/launches'
     | '/api/public/news'
   id:
@@ -242,6 +253,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/apod'
+    | '/api/public/backdrop'
     | '/api/public/launches'
     | '/api/public/news'
   fileRoutesById: FileRoutesById
@@ -263,6 +275,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicApodRoute: typeof ApiPublicApodRoute
+  ApiPublicBackdropRoute: typeof ApiPublicBackdropRoute
   ApiPublicLaunchesRoute: typeof ApiPublicLaunchesRoute
   ApiPublicNewsRoute: typeof ApiPublicNewsRoute
 }
@@ -374,6 +387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicLaunchesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/backdrop': {
+      id: '/api/public/backdrop'
+      path: '/api/public/backdrop'
+      fullPath: '/api/public/backdrop'
+      preLoaderRoute: typeof ApiPublicBackdropRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/apod': {
       id: '/api/public/apod'
       path: '/api/public/apod'
@@ -416,6 +436,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicApodRoute: ApiPublicApodRoute,
+  ApiPublicBackdropRoute: ApiPublicBackdropRoute,
   ApiPublicLaunchesRoute: ApiPublicLaunchesRoute,
   ApiPublicNewsRoute: ApiPublicNewsRoute,
 }
