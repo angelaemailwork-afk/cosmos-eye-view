@@ -245,7 +245,7 @@ function IssHighlight() {
         depthWrite: false,
         depthTest: false,
         blending: THREE.AdditiveBlending,
-        uniforms: { uColor: { value: new THREE.Color("#8fe9ff") } },
+        uniforms: { uColor: { value: new THREE.Color("#ff0000") } },
         vertexShader: `
           varying vec2 vUv;
           void main() {
