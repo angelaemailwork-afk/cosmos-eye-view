@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useTexture } from "@react-three/drei";
+import { Billboard, OrbitControls, useTexture } from "@react-three/drei";
 import { useMemo, useRef, Suspense } from "react";
 import * as THREE from "three";
 import { DeepSpace } from "./DeepSpace";
