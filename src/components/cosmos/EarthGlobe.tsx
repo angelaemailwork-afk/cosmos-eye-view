@@ -87,7 +87,7 @@ function Atmosphere() {
         blending: THREE.AdditiveBlending,
         uniforms: {
           uColor: { value: new THREE.Color("#4aa8ff") },
-          uIntensity: { value: 1.15 },
+          uIntensity: { value: 0.28 },
         },
         vertexShader: `
           varying vec3 vNormal;
@@ -105,7 +105,9 @@ function Atmosphere() {
           uniform vec3 uColor;
           uniform float uIntensity;
           void main() {
-            float rim = pow(1.0 - max(dot(vNormal, vView), 0.0), 2.5);
+            float f = 1.0 - max(dot(vNormal, vView), 0.0);
+            // steeper falloff + fade the outermost edge so no hard ring forms
+            float rim = pow(f, 4.5) * (1.0 - smoothstep(0.85, 1.0, f));
             gl_FragColor = vec4(uColor, rim * uIntensity);
           }
         `,
@@ -113,7 +115,7 @@ function Atmosphere() {
     [],
   );
   return (
-    <mesh scale={1.09}>
+    <mesh scale={1.035}>
       <sphereGeometry args={[1, 64, 64]} />
       <primitive object={material} attach="material" />
     </mesh>
