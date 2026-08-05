@@ -197,7 +197,7 @@ function SpaceDust({ reduced }: { reduced: boolean }) {
   const ref = useRef<THREE.Points>(null);
   const geometry = useMemo(() => {
     const rnd = mulberry32(99);
-    const n = 220;
+    const n = 140;
     const pos = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
       pos[i * 3] = (rnd() - 0.5) * 18;
@@ -212,10 +212,10 @@ function SpaceDust({ reduced }: { reduced: boolean }) {
     () =>
       new THREE.PointsMaterial({
         color: new THREE.Color("#cfd8e6"),
-        size: 0.012,
+        size: 0.006,
         sizeAttenuation: true,
         transparent: true,
-        opacity: 0.18,
+        opacity: 0.12,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
       }),
