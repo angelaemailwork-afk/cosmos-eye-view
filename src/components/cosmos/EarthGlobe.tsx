@@ -304,6 +304,9 @@ function Iss({ lat, lon, altitudeKm }: { lat: number; lon: number; altitudeKm: n
 
   return (
     <group position={pos} quaternion={quaternion}>
+      <group scale={0.24}>
+        <IssHighlight />
+      </group>
       <group ref={groupRef} scale={0.11}>
         <IssModel />
       </group>
