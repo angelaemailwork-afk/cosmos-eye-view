@@ -134,6 +134,7 @@ function StarShell({
           uOpacity: { value: opacity },
           uPixelRatio: { value: 1 },
         },
+        userData: { baseOpacity: opacity },
       }),
     [opacity],
   );
