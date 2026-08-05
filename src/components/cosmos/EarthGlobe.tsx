@@ -238,44 +238,42 @@ function IssModel() {
 
 /** Camera-facing additive halo so the tiny ISS is easy to spot. */
 function IssHighlight() {
-  const material = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        transparent: true,
-        depthWrite: false,
-        depthTest: false,
-        blending: THREE.AdditiveBlending,
-        uniforms: { uColor: { value: new THREE.Color("#ff0000") } },
-        vertexShader: `
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          varying vec2 vUv;
-          uniform vec3 uColor;
-          void main() {
-            float d = length(vUv - 0.5) * 2.0;
-            float glow = pow(max(1.0 - d, 0.0), 2.2) * 0.95;
-            float ring = smoothstep(0.78, 0.85, d) * (1.0 - smoothstep(0.89, 0.97, d)) * 1.2;
-            float a = glow + ring;
-            if (a < 0.004) discard;
-            gl_FragColor = vec4(uColor, a);
-          }
-        `,
-      }),
-    [],
-  );
-  return (
-    <Billboard>
-      <mesh renderOrder={2}>
-        <planeGeometry args={[1, 1]} />
-        <primitive object={material} attach="material" />
-      </mesh>
-    </Billboard>
-  );
+  const material = useMemo(() => {
+    const size = 128;
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext("2d")!;
+    const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    g.addColorStop(0, "rgba(190,245,255,0.85)");
+    g.addColorStop(0.25, "rgba(120,220,255,0.28)");
+    g.addColorStop(0.6, "rgba(90,200,255,0.07)");
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    // thin locator ring
+    ctx.strokeStyle = "rgba(150,235,255,0.55)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, size * 0.40, 0, Math.PI * 2);
+    ctx.stroke();
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return new THREE.SpriteMaterial({
+      map: tex,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+  }, []);
+
+  const sprite = useMemo(() => {
+    const s = new THREE.Sprite(material);
+    s.renderOrder = 3;
+    return s;
+  }, [material]);
+
+  return <primitive object={sprite} />;
 }
 
 function Iss({ lat, lon, altitudeKm }: { lat: number; lon: number; altitudeKm: number }) {
