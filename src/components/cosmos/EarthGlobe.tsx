@@ -236,6 +236,48 @@ function IssModel() {
   );
 }
 
+/** Camera-facing additive halo so the tiny ISS is easy to spot. */
+function IssHighlight() {
+  const material = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        depthTest: false,
+        blending: THREE.AdditiveBlending,
+        uniforms: { uColor: { value: new THREE.Color("#8fe9ff") } },
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          varying vec2 vUv;
+          uniform vec3 uColor;
+          void main() {
+            float d = length(vUv - 0.5) * 2.0;
+            float glow = pow(max(1.0 - d, 0.0), 2.6) * 0.55;
+            float ring = smoothstep(0.80, 0.86, d) * (1.0 - smoothstep(0.90, 0.97, d)) * 0.7;
+            float a = glow + ring;
+            if (a < 0.004) discard;
+            gl_FragColor = vec4(uColor, a);
+          }
+        `,
+      }),
+    [],
+  );
+  return (
+    <Billboard>
+      <mesh renderOrder={2}>
+        <planeGeometry args={[1, 1]} />
+        <primitive object={material} attach="material" />
+      </mesh>
+    </Billboard>
+  );
+}
+
 function Iss({ lat, lon, altitudeKm }: { lat: number; lon: number; altitudeKm: number }) {
   const r = 1 + (altitudeKm / 6371) * 6; // exaggerate altitude for visibility
   const pos = geoToVec3(lat, lon, r);
