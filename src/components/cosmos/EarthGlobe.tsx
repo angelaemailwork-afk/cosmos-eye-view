@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useTexture } from "@react-three/drei";
+import { Billboard, OrbitControls, useTexture } from "@react-three/drei";
 import { useMemo, useRef, Suspense } from "react";
 import * as THREE from "three";
 import { DeepSpace } from "./DeepSpace";
@@ -87,7 +87,7 @@ function Atmosphere() {
         blending: THREE.AdditiveBlending,
         uniforms: {
           uColor: { value: new THREE.Color("#4aa8ff") },
-          uIntensity: { value: 1.15 },
+          uIntensity: { value: 0.28 },
         },
         vertexShader: `
           varying vec3 vNormal;
@@ -105,7 +105,9 @@ function Atmosphere() {
           uniform vec3 uColor;
           uniform float uIntensity;
           void main() {
-            float rim = pow(1.0 - max(dot(vNormal, vView), 0.0), 2.5);
+            float f = 1.0 - max(dot(vNormal, vView), 0.0);
+            // steeper falloff + fade the outermost edge so no hard ring forms
+            float rim = pow(f, 4.5) * (1.0 - smoothstep(0.85, 1.0, f));
             gl_FragColor = vec4(uColor, rim * uIntensity);
           }
         `,
@@ -113,7 +115,7 @@ function Atmosphere() {
     [],
   );
   return (
-    <mesh scale={1.09}>
+    <mesh scale={1.035}>
       <sphereGeometry args={[1, 64, 64]} />
       <primitive object={material} attach="material" />
     </mesh>
@@ -229,9 +231,49 @@ function IssModel() {
       </mesh>
 
       {/* subtle running light */}
-      <pointLight color="#7ff4ff" intensity={0.4} distance={0.5} />
+      <pointLight color="#7ff4ff" intensity={0.9} distance={0.6} />
     </group>
   );
+}
+
+/** Camera-facing additive halo so the tiny ISS is easy to spot. */
+function IssHighlight() {
+  const material = useMemo(() => {
+    const size = 128;
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext("2d")!;
+    const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    g.addColorStop(0, "rgba(190,245,255,0.85)");
+    g.addColorStop(0.25, "rgba(120,220,255,0.28)");
+    g.addColorStop(0.6, "rgba(90,200,255,0.07)");
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    // thin locator ring
+    ctx.strokeStyle = "rgba(150,235,255,0.55)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, size * 0.40, 0, Math.PI * 2);
+    ctx.stroke();
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return new THREE.SpriteMaterial({
+      map: tex,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+  }, []);
+
+  const sprite = useMemo(() => {
+    const s = new THREE.Sprite(material);
+    s.renderOrder = 3;
+    return s;
+  }, [material]);
+
+  return <primitive object={sprite} />;
 }
 
 function Iss({ lat, lon, altitudeKm }: { lat: number; lon: number; altitudeKm: number }) {
@@ -260,6 +302,9 @@ function Iss({ lat, lon, altitudeKm }: { lat: number; lon: number; altitudeKm: n
 
   return (
     <group position={pos} quaternion={quaternion}>
+      <group scale={0.42}>
+        <IssHighlight />
+      </group>
       <group ref={groupRef} scale={0.11}>
         <IssModel />
       </group>
