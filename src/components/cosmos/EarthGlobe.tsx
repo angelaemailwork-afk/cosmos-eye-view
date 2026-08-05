@@ -1,13 +1,16 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Stars, OrbitControls, useTexture } from "@react-three/drei";
+import { OrbitControls, useTexture } from "@react-three/drei";
 import { useMemo, useRef, Suspense } from "react";
 import * as THREE from "three";
+import { DeepSpace } from "./DeepSpace";
 
 interface Props {
   lat: number;
   lon: number;
   altitudeKm: number;
   history?: Array<{ lat: number; lon: number }>;
+  /** "eclipsed" (night side) brightens the starfield slightly. */
+  visibility?: string;
 }
 
 const TEX_BASE = "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/textures/planets/";
