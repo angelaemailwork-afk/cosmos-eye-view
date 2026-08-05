@@ -231,7 +231,7 @@ function IssModel() {
       </mesh>
 
       {/* subtle running light */}
-      <pointLight color="#7ff4ff" intensity={0.4} distance={0.5} />
+      <pointLight color="#7ff4ff" intensity={0.9} distance={0.6} />
     </group>
   );
 }
@@ -258,8 +258,8 @@ function IssHighlight() {
           uniform vec3 uColor;
           void main() {
             float d = length(vUv - 0.5) * 2.0;
-            float glow = pow(max(1.0 - d, 0.0), 2.6) * 0.55;
-            float ring = smoothstep(0.80, 0.86, d) * (1.0 - smoothstep(0.90, 0.97, d)) * 0.7;
+            float glow = pow(max(1.0 - d, 0.0), 2.2) * 0.95;
+            float ring = smoothstep(0.78, 0.85, d) * (1.0 - smoothstep(0.89, 0.97, d)) * 1.2;
             float a = glow + ring;
             if (a < 0.004) discard;
             gl_FragColor = vec4(uColor, a);
@@ -304,7 +304,7 @@ function Iss({ lat, lon, altitudeKm }: { lat: number; lon: number; altitudeKm: n
 
   return (
     <group position={pos} quaternion={quaternion}>
-      <group scale={0.24}>
+      <group scale={0.34}>
         <IssHighlight />
       </group>
       <group ref={groupRef} scale={0.11}>
