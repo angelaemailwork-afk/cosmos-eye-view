@@ -1,13 +1,16 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Stars, OrbitControls, useTexture } from "@react-three/drei";
+import { OrbitControls, useTexture } from "@react-three/drei";
 import { useMemo, useRef, Suspense } from "react";
 import * as THREE from "three";
+import { DeepSpace } from "./DeepSpace";
 
 interface Props {
   lat: number;
   lon: number;
   altitudeKm: number;
   history?: Array<{ lat: number; lon: number }>;
+  /** "eclipsed" (night side) brightens the starfield slightly. */
+  visibility?: string;
 }
 
 const TEX_BASE = "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/textures/planets/";
@@ -276,17 +279,17 @@ function OrbitTrail({ history }: { history: Array<{ lat: number; lon: number }> 
   );
 }
 
-export function EarthGlobe({ lat, lon, altitudeKm, history = [] }: Props) {
+export function EarthGlobe({ lat, lon, altitudeKm, history = [], visibility }: Props) {
   return (
     <Canvas camera={{ position: [0, 0, 3.2], fov: 45 }} dpr={[1, 2]} gl={{ antialias: true }}>
-      <color attach="background" args={["#00000000"]} />
+      <color attach="background" args={["#02030a"]} />
       <ambientLight intensity={0.12} />
       <directionalLight
         position={[SUN_DIR.x * 5, SUN_DIR.y * 5, SUN_DIR.z * 5]}
         intensity={1.6}
         color="#fff5e6"
       />
-      <Stars radius={100} depth={50} count={4000} factor={4} fade speed={0.4} />
+      <DeepSpace nightSide={visibility !== "daylight"} />
       <Suspense fallback={null}>
         <Earth />
       </Suspense>

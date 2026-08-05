@@ -57,6 +57,7 @@ function IssPage() {
                 lon={iss.data.longitude}
                 altitudeKm={iss.data.altitude}
                 history={history}
+                visibility={iss.data.visibility}
               />
             ) : null}
           </Suspense>
