@@ -305,6 +305,10 @@ function Iss({ lat, lon, altitudeKm }: { lat: number; lon: number; altitudeKm: n
       <group scale={0.34}>
         <IssHighlight />
       </group>
+      <mesh scale={0.5}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshBasicMaterial color="#ff0000" />
+      </mesh>
       <group ref={groupRef} scale={0.11}>
         <IssModel />
       </group>
